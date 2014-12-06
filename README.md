@@ -1,30 +1,26 @@
-Previously, you developed an automated system to characterize the response of the Kundt’s tube to sound waves of known frequency. You generated a transmission spectrum of the tube by scanning the frequency of sound sent to a speaker at one end of the tube and measuring the average of the absolute value of the time varying amplitude of the sound recorded for a known time interval using a microphone at the other end of the tube.
+In this exercise, you will write 4 VIs that measures the response of [Kundt's Tube](http://en.wikipedia.org/wiki/Kundt's_tube). We are gonna use first 3 VIs as a subVIs, so connect terminals.
 
-Now, you will reconfigure the Kundt’s tube to measure its response to an impulse. You will observe that the tube exhibits a “ring down” behavior, something akin to the sound a bell makes when struck with a sharp blow. Fourier transformation of the ring down will generate the same spectrum of the Kundt’s tube.
+0) Create a project from LabView menu. We are going to use this project as our container, all the VIs created will be created in this project.
 
-The impulse response experiment is a specific case of the stimulus response experiment. Here, you will generate the impulse using the timer-counter facility of the DAQ board to produce a logic pulse of software selectable time duration. Then, at the end of the pulse you will acquire the sound-wave (pressure) response of the system using a microphone connected to the ADC. Connections are as described:
+1) Write a VI called CreateIntegerArray that creates an array with given minimum, maximum and number of points. It also should be able to select between linear and logarithmic spacing. It should always have integer outputs.
 
-1. Connect the general-purpose counter #0 output (PFI 12) pin 89 on the box) and the digital ground (pin 90) to the speaker input of the audio amplifier box.
+![CreateIntegerArray.vi](images/CreateIntegerArray.png)
 
-2. Also connect pin 89 to pin 73, for trigger.
+2) Write a VI called SignalGenerator that generates a sine wave with given frequency and amplitude and outputs from AO. You can take a look at Problem 4.6 (Bode Magnitude Plot), for detailed instructions.
 
-3. For data acquisition, you should use pin 73 at falling edge of digital trigger.
+![SignalGenerator.vi](images/SignalGenerator.png)
 
-![Trigger Setup](images/setup.jpg)
+3) Write a VI called MeasureRMS that measures an analog signal from AI with given sampling rate and number of samples, and outputs a waveform and rms value for measured signal. You can take a look at Problem 4.6 (Bode Magnitude Plot), for detailed instructions.
 
-Because the experiment is over so quickly, and so readily repeated, you will develop a facility in your VI to add many experiments together to improve the signal to noise ratio.
+![MeasureRMS.vi](images/MeasureRMS.png)
 
-![Impulse.vi](images/screenshot.png)
+4) Now, we are going to put all this together into our main VI called KundtsTube. This VI should get user input for either a sweep or a single frequency signal generation. Use CreateIntegerArray for sweep and use SignalGenerator to generate the signal.
 
-After averaging signals, you should also run Fourier transform over the averaged signal to get frequency spectrum. When you get the frequency spectrum, select the same frequency peak that you selected last week and analyze it using the fitter that you developed last week.
+To measure the response, use MeasureRMS and output your results as Gain vs Frequency. Also, use the VI that you created for saving spreadsheets to save your results at the end. The text file should include two columns: frequency and gain.
 
-Needless to say, all of this should be done in a project container and you should save data as default.
+This VI should also have dwell time for sweeping frequencies.
 
-Answer these questions in your pull request:
-
-1. What is the effect of the pulse width on the experiment? Try settings like 0.1, 1.0, and 10 msec. Report your observations in your documentation.
-2. What is the effect of the acquisition rate? Try settings like 1000, 10000 and 100000 points per sec. Also note what the minimum buffer size and scan rate is needed to describe the response up to 2000 Hz.
-3. Try the effect of signal averaging on the appearance of the power spectrum. For this experiment, reduce the gain of the audio amplifier until the signal is barely detectable.
+![KundtsTube.vi](images/KundtsTube.png)
 
 
-+5 bonus points are awarded if you have user controlled pulse width and duty cycle in the front panel.
+Before uploading your finished project, make your results default from edit menu.
